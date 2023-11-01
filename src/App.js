@@ -1,23 +1,31 @@
-import logo from './logo.svg';
+import axios from 'axios';
 import './App.css';
+import { useEffect, useState } from 'react';
+import UserList from './UserList';
 
-function App() {
+const App = () => {
+  const [ListOfUsers, setListOfUsers] = useState([])
+
+  useEffect(() => {
+
+    axios('https://jsonplaceholder.typicode.com/users')
+      .then((res) => {
+        setListOfUsers(res.data)
+      })
+  }, [])
+
+
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div className="container">
+
+      {ListOfUsers.length > 0 ?
+
+        ListOfUsers.map((users) => (
+          <UserList className="col-md-3" key={users.id} users={users} />
+        ))
+        : <h1>No movie found</h1>}
+
     </div>
   );
 }
